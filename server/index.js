@@ -18,9 +18,8 @@ app.use(bodyParser.urlencoded({ extended: true }))
 // compression middleware
 app.use(compression())
 
-// auth and api routes
-app.use('/auth', require('./auth'))
-app.use('/api', require('./api'))
+// api routes
+// app.use('/api', require('./api'))
 
 // static file-serving middleware
 app.use(express.static(path.join(__dirname, '..', 'public')))
@@ -49,5 +48,5 @@ app.use((err, req, res, next) => {
 })
 
 app.listen(PORT, () => console.log(`Server online at port ${PORT}`))
-  .then(db.sync())
-  .catch(err => console.error(err))
+  // .then(db.sync())
+  // .catch(err => console.error(err))
