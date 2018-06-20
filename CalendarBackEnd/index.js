@@ -8,6 +8,9 @@ const PORT = process.env.PORT || 8080
 const app = express()
 module.exports = app
 
+// sync database
+db.sync().then(() => console.log('Database is synced'));
+
 // logging middleware
 app.use(morgan('dev'))
 
@@ -19,7 +22,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(compression())
 
 // api routes
-// app.use('/api', require('./api'))
+app.use('/api', require('./api'))
 
 // static file-serving middleware
 app.use(express.static(path.join(__dirname, '..', 'public')))
@@ -48,5 +51,3 @@ app.use((err, req, res, next) => {
 })
 
 app.listen(PORT, () => console.log(`Server online at port ${PORT}`))
-  // .then(db.sync())
-  // .catch(err => console.error(err))
