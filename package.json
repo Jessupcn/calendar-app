@@ -1,11 +1,15 @@
 {
   "name": "calendar-app",
   "version": "1.0.0",
-  "description": "",
+  "description": "A calendar application for the Spotify Fellowship application",
   "main": "index.js",
   "scripts": {
+    "build-client": "webpack-cli --watch --mode development",
+    "build-client-watch": "webpack -w",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node CalendarBackEnd"
+    "start": "node CalendarBackEnd",
+    "start-dev": "NODE_ENV='development' npm run build-client-watch & npm run start-server",
+    "start-server": "nodemon CalendarBackEnd -e html,js,scss --ignore CalendarFrontEnd/public --ignore CalendarFrontEnd/client"
   },
   "repository": {
     "type": "git",
@@ -19,14 +23,31 @@
   },
   "homepage": "https://github.com/Jessupcn/calendar-app#readme",
   "dependencies": {
-    "body-parser": "^1.18.3",
+    "body-parser": "^1.18.2",
     "compression": "^1.7.2",
     "express": "^4.16.3",
+    "history": "^4.6.3",
     "morgan": "^1.9.0",
     "pg": "^7.4.3",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-router-dom": "^4.3.1",
     "sequelize": "^4.37.10"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.0.0-beta.40",
+    "@babel/polyfill": "^7.0.0-beta.40",
+    "@babel/preset-env": "^7.0.0-beta.40",
+    "@babel/preset-react": "^7.0.0-beta.40",
+    "@babel/preset-stage-2": "^7.0.0-beta.40",
+    "@babel/register": "^7.0.0-beta.40",
+    "babel-eslint": "^8.0.1",
+    "babel-loader": "^8.0.0-beta.2",
+    "eslint": "^4.10.0",
+    "eslint-config-fullstack": "^3.0.0",
+    "eslint-plugin-react": "^7.4.0",
+    "nodemon": "^1.12.1",
+    "webpack": "^4.0.1",
+    "webpack-cli": "^2.0.9"
   }
 }

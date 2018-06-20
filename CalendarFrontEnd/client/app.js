@@ -1,8 +1,8 @@
-import React from 'react'
+import React from 'react';
 
 // import {Navbar, Sidebar} from './components'
 // import Routes from './routes'
-import Calendar from './components'
+import { Calendar } from './components';
 
 const App = () => {
   return (
@@ -10,6 +10,6 @@ const App = () => {
       <Calendar />
     </div>
   )
-}
+};
 
-export default App
+export default App;
