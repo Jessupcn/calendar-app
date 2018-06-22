@@ -1,9 +1,49 @@
-#calendarDay {
-  text-decoration: none;
-  border: 3px black;
+
+#calendarContainer {
+  width: 84vw;
+  margin: 7vw;
 }
 
-/* label {
-  display: block;
-} */
+#titleContainer {
+  width: calc(84vw - 3px);
+  height: calc(10vh - 3px);
+  border-top: 3px solid black;
+  border-right: 3px solid black;
+  border-left: 3px solid black;
+  margin: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+#dayContainer {
+  width: 84vw;
+  border: 1.5px solid black;
+  display: flex;
+  flex-wrap: wrap;
+}
   
+#calendarDay {
+  text-decoration: none;
+  border: 1.5px solid black;
+  width: calc(12vw - 3px);
+  height: calc(15vh - 3px);
+}
+
+.dayNumber {
+  margin: 5px
+}
+
+#eventOnCalendar {
+  margin: 5px;
+  font-size: 10px;
+  border: 1px solid black;
+  background: plum;
+  border-radius: 25px;
+
+}
+
+.eventText {
+  margin: 0;
+  padding-left: 10px;
+}
