@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom'
 
 import { CalendarDay } from './index'
 import { fetchEvents } from '../redux_store'
+import { Icon } from 'semantic-ui-react'
 
 
 /**
@@ -13,11 +14,14 @@ class Calendar extends Component {
 
   constructor(props) {
     super(props);
-    props.loadInitialData();
+  }
+
+  componentDidMount () {
+    this.props.loadInitialData();
   }
 
   buildCalendar () {
-    let calendarDays = new Array(28).fill().map((item, index) => {
+    const calendarDays = new Array(35).fill().map((item, index) => {
       return {
         day: index + 1,
         events: []
@@ -41,7 +45,7 @@ class Calendar extends Component {
     return (
       <div id="calendarContainer">
         <div id="titleContainer">
-          <h1>Month</h1>
+          <h1>July</h1>
         </div>
         <div id="dayContainer" >
           { this.buildCalendar() }

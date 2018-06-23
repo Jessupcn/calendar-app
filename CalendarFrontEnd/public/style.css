@@ -1,12 +1,11 @@
-
 #calendarContainer {
   width: 84vw;
   margin: 7vw;
 }
 
 #titleContainer {
-  width: calc(84vw - 3px);
-  height: calc(10vh - 3px);
+  width: calc(84vw + 3px);
+  height: calc(10vh + 3px);
   border-top: 3px solid black;
   border-right: 3px solid black;
   border-left: 3px solid black;
@@ -17,7 +16,7 @@
 }
 
 #dayContainer {
-  width: 84vw;
+  width: calc(84vw + 3px);
   border: 1.5px solid black;
   display: flex;
   flex-wrap: wrap;
@@ -26,12 +25,21 @@
 #calendarDay {
   text-decoration: none;
   border: 1.5px solid black;
-  width: calc(12vw - 3px);
+  width: calc(12vw);
   height: calc(15vh - 3px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .dayNumber {
   margin: 5px
+}
+
+#addEventButton {
+  margin: 5px;
+  width: 20%;
+  align-self: flex-end;
 }
 
 #eventOnCalendar {
