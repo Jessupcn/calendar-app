@@ -1,29 +1,23 @@
 import React from 'react';
 import { CalendarEvent, AddEvent } from './index';
-import { Button, Icon, Modal, Header } from 'semantic-ui-react'
 
-export default function CalendarDay (props) {
+export default function CalendarDay(props) {
   // Pull the current date and events array off the passed
   // through event object.
-  const {day, events} = props.eventObj;
+  const { day, events } = props.eventObj;
+  console.log(events);
   return (
     <div id="calendarDay">
       <div>
-        <h3 className="dayNumber">{ day <= 31 ? day : null }</h3>
+        <h3 className="dayNumber">{day <= 31 ? day : null}</h3>
       </div>
       <div>
-        {
-          events
+        {events
           ? events.map(event => <CalendarEvent key={event.id} event={event} />)
-          : null
-        }
+          : null}
       </div>
-      {
-      // only display the Add Event button in boxes that have numbers in them.
-      day <= 31
-      ? <AddEvent day={ day } />
-      : null
-      }
+      {// only display the Add Event button in boxes that have numbers in them.
+      day <= 31 ? <AddEvent day={day} /> : null}
     </div>
   );
 }

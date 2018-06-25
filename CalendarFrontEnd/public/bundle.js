@@ -275,12 +275,12 @@ function (_Component) {
     _this = _possibleConstructorReturn(this, _getPrototypeOf(AddEvent).call(this, props));
     _this.state = {
       modalOpen: false,
-      eventName: '',
-      eventDescription: '',
+      eventName: _this.props.passedInEvent.name || '',
+      eventDescription: _this.props.passedInEvent.description || '',
       startTime: '',
-      endTime: '' //Bind functions
+      endTime: ''
+    }; //Bind functions
 
-    };
     _this.handleChange = _this.handleChange.bind(_assertThisInitialized(_assertThisInitialized(_this)));
     _this.handleSubmit = _this.handleSubmit.bind(_assertThisInitialized(_assertThisInitialized(_this)));
     return _this;
@@ -347,12 +347,14 @@ function (_Component) {
         label: "Event Name",
         placeholder: "Event name",
         name: "eventName",
+        value: this.state.eventName,
         onChange: this.handleChange
       }), _react.default.createElement(_semanticUiReact.Form.Field, {
         control: _semanticUiReact.TextArea,
         label: "Event Description",
         placeholder: "Description of the event",
         name: "eventDescription",
+        value: this.state.eventDescription,
         onChange: this.handleChange
       }), _react.default.createElement(_semanticUiReact.Form.Group, {
         inline: true
@@ -556,8 +558,6 @@ var _react = _interopRequireDefault(__webpack_require__(/*! react */ "./node_mod
 
 var _index = __webpack_require__(/*! ./index */ "./CalendarFrontEnd/client/components/index.js");
 
-var _semanticUiReact = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function CalendarDay(props) {
@@ -566,6 +566,7 @@ function CalendarDay(props) {
   var _props$eventObj = props.eventObj,
       day = _props$eventObj.day,
       events = _props$eventObj.events;
+  console.log(events);
   return _react.default.createElement("div", {
     id: "calendarDay"
   }, _react.default.createElement("div", null, _react.default.createElement("h3", {
@@ -614,18 +615,6 @@ function CalendarDay(props) {
 
 /***/ }),
 
-/***/ "./CalendarFrontEnd/client/components/SingleEvent.js":
-/*!***********************************************************!*\
-  !*** ./CalendarFrontEnd/client/components/SingleEvent.js ***!
-  \***********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-/***/ }),
-
 /***/ "./CalendarFrontEnd/client/components/index.js":
 /*!*****************************************************!*\
   !*** ./CalendarFrontEnd/client/components/index.js ***!
@@ -657,12 +646,6 @@ Object.defineProperty(exports, "CalendarEvent", {
     return _CalendarEvent.default;
   }
 });
-Object.defineProperty(exports, "SingleEvent", {
-  enumerable: true,
-  get: function get() {
-    return _SingleEvent.default;
-  }
-});
 Object.defineProperty(exports, "AddEvent", {
   enumerable: true,
   get: function get() {
@@ -675,8 +658,6 @@ var _Calendar = _interopRequireDefault(__webpack_require__(/*! ./Calendar */ "./
 var _CalendarDay = _interopRequireDefault(__webpack_require__(/*! ./CalendarDay */ "./CalendarFrontEnd/client/components/CalendarDay.js"));
 
 var _CalendarEvent = _interopRequireDefault(__webpack_require__(/*! ./CalendarEvent */ "./CalendarFrontEnd/client/components/CalendarEvent.js"));
-
-var _SingleEvent = _interopRequireDefault(__webpack_require__(/*! ./SingleEvent */ "./CalendarFrontEnd/client/components/SingleEvent.js"));
 
 var _AddEvent = _interopRequireDefault(__webpack_require__(/*! ./AddEvent */ "./CalendarFrontEnd/client/components/AddEvent.js"));
 

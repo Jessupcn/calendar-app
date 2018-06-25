@@ -1,8 +1,16 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { withRouter } from 'react-router-dom'
-import { Button, Header, Icon, Modal, Form, Input, TextArea, Select, Dropdown } from 'semantic-ui-react'
-import { createEvent } from '../redux_store'
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import {
+  Header,
+  Icon,
+  Modal,
+  Form,
+  Input,
+  TextArea,
+  Select
+} from 'semantic-ui-react';
+import { createEvent } from '../redux_store';
 
 // Options for time dropdown
 const options = [
@@ -29,97 +37,105 @@ const options = [
   { key: '21', value: '20', text: '8 pm' },
   { key: '22', value: '21', text: '9 pm' },
   { key: '23', value: '22', text: '10 pm' },
-  { key: '12', value: '23', text: '11 pm' },
-]
+  { key: '12', value: '23', text: '11 pm' }
+];
 
 class AddEvent extends Component {
-
   constructor(props) {
-    super(props)
+    super(props);
+
     this.state = {
       modalOpen: false,
-      eventName: '',
-      eventDescription: '',
+      eventName: this.props.passedInEvent.name || '',
+      eventDescription: this.props.passedInEvent.description || '',
       startTime: '',
       endTime: ''
-    }
+    };
 
     //Bind functions
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-
   }
 
-  handleChange (evt, { name, value }) {
+  handleChange(evt, { name, value }) {
     const change = {};
     change[name] = value;
     this.setState(change);
   }
 
-  handleSubmit () {
-    const { eventName, eventDescription, startTime, endTime } = this.state
+  handleSubmit() {
+    const { eventName, eventDescription, startTime, endTime } = this.state;
     const objToSend = {
       name: eventName,
       description: eventDescription,
       startTime: `2018-07-${this.props.day} ${startTime}:00:00`,
       endTime: `2018-07-${this.props.day} ${endTime}:00:00`
-    }
+    };
     this.props.addEvent(objToSend);
-    this.setState({modalOpen: false})
+    this.setState({ modalOpen: false });
   }
 
   render() {
     return (
       <Modal
-        trigger={ <Icon onClick={() => this.setState({modalOpen: true})} name="add" id="addEventButton" />}
-        basic size='small'
+        trigger={
+          <Icon
+            onClick={() => this.setState({ modalOpen: true })}
+            name="add"
+            id="addEventButton"
+          />
+        }
+        basic
+        size="small"
         open={this.state.modalOpen}
-        onClose={() => this.setState({modalOpen: false})}
+        onClose={() => this.setState({ modalOpen: false })}
       >
         <Header content="Add New Event:" />
         <Modal.Content>
-        <Form inverted onSubmit={this.handleSubmit}>
-          <Form.Field
-            control={Input}
-            label="Event Name"
-            placeholder="Event name"
-            name="eventName"
-            onChange={this.handleChange}
-          />
-          <Form.Field
-            control={TextArea}
-            label="Event Description"
-            placeholder="Description of the event"
-            name="eventDescription"
-            onChange={this.handleChange}
-          />
-          <Form.Group inline>
-            <Form.Select
-              fluid
-              control={Select}
-              label="Start Time:"
-              options={options}
-              placeholder="Select Time"
-              name="startTime"
+          <Form inverted onSubmit={this.handleSubmit}>
+            <Form.Field
+              control={Input}
+              label="Event Name"
+              placeholder="Event name"
+              name="eventName"
+              value={this.state.eventName}
               onChange={this.handleChange}
             />
-            <Form.Select
-              fluid
-              control={Select}
-              label="End Time"
-              options={options}
-              placeholder="Select Time"
-              name="endTime"
+            <Form.Field
+              control={TextArea}
+              label="Event Description"
+              placeholder="Description of the event"
+              name="eventDescription"
+              value={this.state.eventDescription}
               onChange={this.handleChange}
             />
-          </Form.Group>
-          <Form.Button color="green" inverted>
+            <Form.Group inline>
+              <Form.Select
+                fluid
+                control={Select}
+                label="Start Time:"
+                options={options}
+                placeholder="Select Time"
+                name="startTime"
+                onChange={this.handleChange}
+              />
+              <Form.Select
+                fluid
+                control={Select}
+                label="End Time"
+                options={options}
+                placeholder="Select Time"
+                name="endTime"
+                onChange={this.handleChange}
+              />
+            </Form.Group>
+            <Form.Button color="green" inverted>
               <Icon name="checkmark" />Submit
-          </Form.Button>
-        </Form>
+            </Form.Button>
+          </Form>
         </Modal.Content>
       </Modal>
-    )
+    );
   }
 }
 
@@ -127,14 +143,19 @@ class AddEvent extends Component {
  * Map dispatch to props
  */
 
-const mapDispatch = (dispatch) => {
+const mapDispatch = dispatch => {
   return {
     addEvent(event) {
-      dispatch(createEvent(event))
+      dispatch(createEvent(event));
     }
-  }
-}
+  };
+};
 
 // The `withRouter` wrapper makes sure that updates are not blocked
 // when the url changes
-export default withRouter(connect(null, mapDispatch)(AddEvent))
+export default withRouter(
+  connect(
+    null,
+    mapDispatch
+  )(AddEvent)
+);

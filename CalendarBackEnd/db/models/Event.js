@@ -1,17 +1,17 @@
-const Sequelize = require('sequelize')
-const db = require('../db')
+const Sequelize = require('sequelize');
+const db = require('../db');
 
 const Event = db.define('event', {
   name: {
     type: Sequelize.STRING,
     allowNull: false,
     validate: {
-      notEmpty: true,
+      notEmpty: true
     }
   },
 
   description: {
-    type: Sequelize.TEXT,
+    type: Sequelize.TEXT
   },
 
   startTime: {
@@ -20,8 +20,7 @@ const Event = db.define('event', {
 
   endTime: {
     type: Sequelize.DATE
-  },
+  }
+});
 
-})
-
-module.exports = Event
+module.exports = Event;

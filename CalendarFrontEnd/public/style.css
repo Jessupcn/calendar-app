@@ -21,7 +21,7 @@
   display: flex;
   flex-wrap: wrap;
 }
-  
+
 #calendarDay {
   text-decoration: none;
   border: 1.5px solid black;
@@ -33,7 +33,7 @@
 }
 
 .dayNumber {
-  margin: 5px
+  margin: 5px;
 }
 
 #addEventButton {
@@ -48,7 +48,6 @@
   border: 1px solid black;
   background: plum;
   border-radius: 25px;
-
 }
 
 .eventText {

@@ -5,13 +5,13 @@ module.exports = router;
 router.get('/', (req, res, next) => {
   Event.findAll()
     .then(events => res.status(200).json(events))
-    .catch(next)
+    .catch(next);
 });
 
 router.get('/:id', (req, res, next) => {
   Event.findById(req.params.id)
     .then(event => res.status(200).json(event))
-    .catch(next)
+    .catch(next);
 });
 
 router.post('/', (req, res, next) => {

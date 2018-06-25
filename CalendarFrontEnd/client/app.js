@@ -9,7 +9,7 @@ const App = () => {
     <div>
       <Calendar />
     </div>
-  )
+  );
 };
 
 export default App;
