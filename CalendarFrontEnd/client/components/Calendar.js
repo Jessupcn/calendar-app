@@ -4,17 +4,12 @@ import { withRouter } from 'react-router-dom'
 
 import { CalendarDay } from './index'
 import { fetchEvents } from '../redux_store'
-import { Icon } from 'semantic-ui-react'
 
 
 /**
  * COMPONENT
  */
 class Calendar extends Component {
-
-  constructor(props) {
-    super(props);
-  }
 
   componentDidMount () {
     this.props.loadInitialData();
@@ -56,7 +51,7 @@ class Calendar extends Component {
 }
 
 /**
- * CONTAINER
+ * Map state and dispatch to props
  */
 const mapState = (state) => {
   return {

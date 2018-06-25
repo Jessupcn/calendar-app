@@ -21,7 +21,7 @@ export default function CalendarDay (props) {
       {
       // only display the Add Event button in boxes that have numbers in them.
       day <= 31
-      ? <AddEvent />
+      ? <AddEvent day={ day } />
       : null
       }
     </div>

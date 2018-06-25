@@ -135,7 +135,13 @@ exports.default = void 0;
 
 var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
 
+var _reactRedux = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+
+var _reactRouterDom = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/es/index.js");
+
 var _semanticUiReact = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
+
+var _redux_store = __webpack_require__(/*! ../redux_store */ "./CalendarFrontEnd/client/redux_store/index.js");
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
@@ -157,7 +163,104 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+// Options for time dropdown
+var options = [{
+  key: '0',
+  value: '0',
+  text: '12 am'
+}, {
+  key: '1',
+  value: '1',
+  text: '1 am'
+}, {
+  key: '2',
+  value: '2',
+  text: '2 am'
+}, {
+  key: '3',
+  value: '3',
+  text: '3 am'
+}, {
+  key: '4',
+  value: '4',
+  text: '4 am'
+}, {
+  key: '5',
+  value: '5',
+  text: '5 am'
+}, {
+  key: '6',
+  value: '6',
+  text: '6 am'
+}, {
+  key: '7',
+  value: '7',
+  text: '7 am'
+}, {
+  key: '8',
+  value: '8',
+  text: '8 am'
+}, {
+  key: '9',
+  value: '9',
+  text: '9 am'
+}, {
+  key: '10',
+  value: '10',
+  text: '10 am'
+}, {
+  key: '11',
+  value: '11',
+  text: '11 am'
+}, {
+  key: '13',
+  value: '12',
+  text: '12 pm'
+}, {
+  key: '14',
+  value: '13',
+  text: '1 pm'
+}, {
+  key: '15',
+  value: '14',
+  text: '2 pm'
+}, {
+  key: '16',
+  value: '15',
+  text: '3 pm'
+}, {
+  key: '17',
+  value: '16',
+  text: '4 pm'
+}, {
+  key: '18',
+  value: '17',
+  text: '5 pm'
+}, {
+  key: '19',
+  value: '18',
+  text: '6 pm'
+}, {
+  key: '20',
+  value: '19',
+  text: '7 pm'
+}, {
+  key: '21',
+  value: '20',
+  text: '8 pm'
+}, {
+  key: '22',
+  value: '21',
+  text: '9 pm'
+}, {
+  key: '23',
+  value: '22',
+  text: '10 pm'
+}, {
+  key: '12',
+  value: '23',
+  text: '11 pm'
+}];
 
 var AddEvent =
 /*#__PURE__*/
@@ -170,25 +273,12 @@ function (_Component) {
     _classCallCheck(this, AddEvent);
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(AddEvent).call(this, props));
-
-    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "handleSubmit", function () {
-      var _this$state = _this.state,
-          eventName = _this$state.eventName,
-          eventDescription = _this$state.eventDescription,
-          startTime = _this$state.startTime,
-          endTime = _this$state.endTime;
-
-      _this.setState({
-        submittedName: name,
-        submittedEmail: email
-      });
-    });
-
     _this.state = {
+      modalOpen: false,
       eventName: '',
-      eventDescription: '' // startTime: ,
-      // endTime: 
-      //Bind functions
+      eventDescription: '',
+      startTime: '',
+      endTime: '' //Bind functions
 
     };
     _this.handleChange = _this.handleChange.bind(_assertThisInitialized(_assertThisInitialized(_this)));
@@ -198,27 +288,60 @@ function (_Component) {
 
   _createClass(AddEvent, [{
     key: "handleChange",
-    value: function handleChange(evt) {
-      var key = evt.target.name;
-      var value = evt.target.value;
-      var stateUpdate = {};
-      stateUpdate[key] = value;
-      this.setState(stateUpdate);
+    value: function handleChange(evt, _ref) {
+      var name = _ref.name,
+          value = _ref.value;
+      var change = {};
+      change[name] = value;
+      this.setState(change);
+    }
+  }, {
+    key: "handleSubmit",
+    value: function handleSubmit() {
+      var _this$state = this.state,
+          eventName = _this$state.eventName,
+          eventDescription = _this$state.eventDescription,
+          startTime = _this$state.startTime,
+          endTime = _this$state.endTime;
+      var objToSend = {
+        name: eventName,
+        description: eventDescription,
+        startTime: "2018-07-".concat(this.props.day, " ").concat(startTime, ":00:00"),
+        endTime: "2018-07-".concat(this.props.day, " ").concat(endTime, ":00:00")
+      };
+      this.props.addEvent(objToSend);
+      this.setState({
+        modalOpen: false
+      });
     }
   }, {
     key: "render",
     value: function render() {
+      var _this2 = this;
+
       return _react.default.createElement(_semanticUiReact.Modal, {
         trigger: _react.default.createElement(_semanticUiReact.Icon, {
+          onClick: function onClick() {
+            return _this2.setState({
+              modalOpen: true
+            });
+          },
           name: "add",
           id: "addEventButton"
         }),
         basic: true,
-        size: "small"
+        size: "small",
+        open: this.state.modalOpen,
+        onClose: function onClose() {
+          return _this2.setState({
+            modalOpen: false
+          });
+        }
       }, _react.default.createElement(_semanticUiReact.Header, {
         content: "Add New Event:"
       }), _react.default.createElement(_semanticUiReact.Modal.Content, null, _react.default.createElement(_semanticUiReact.Form, {
-        inverted: true
+        inverted: true,
+        onSubmit: this.handleSubmit
       }, _react.default.createElement(_semanticUiReact.Form.Field, {
         control: _semanticUiReact.Input,
         label: "Event Name",
@@ -231,19 +354,52 @@ function (_Component) {
         placeholder: "Description of the event",
         name: "eventDescription",
         onChange: this.handleChange
-      }))), _react.default.createElement(_semanticUiReact.Modal.Actions, null, _react.default.createElement(_semanticUiReact.Button, {
+      }), _react.default.createElement(_semanticUiReact.Form.Group, {
+        inline: true
+      }, _react.default.createElement(_semanticUiReact.Form.Select, {
+        fluid: true,
+        control: _semanticUiReact.Select,
+        label: "Start Time:",
+        options: options,
+        placeholder: "Select Time",
+        name: "startTime",
+        onChange: this.handleChange
+      }), _react.default.createElement(_semanticUiReact.Form.Select, {
+        fluid: true,
+        control: _semanticUiReact.Select,
+        label: "End Time",
+        options: options,
+        placeholder: "Select Time",
+        name: "endTime",
+        onChange: this.handleChange
+      })), _react.default.createElement(_semanticUiReact.Form.Button, {
         color: "green",
         inverted: true
       }, _react.default.createElement(_semanticUiReact.Icon, {
         name: "checkmark"
-      }), "Submit")));
+      }), "Submit"))));
     }
   }]);
 
   return AddEvent;
 }(_react.Component);
+/**
+ * Map dispatch to props
+ */
 
-var _default = AddEvent;
+
+var mapDispatch = function mapDispatch(dispatch) {
+  return {
+    addEvent: function addEvent(event) {
+      dispatch((0, _redux_store.createEvent)(event));
+    }
+  };
+}; // The `withRouter` wrapper makes sure that updates are not blocked
+// when the url changes
+
+
+var _default = (0, _reactRouterDom.withRouter)((0, _reactRedux.connect)(null, mapDispatch)(AddEvent));
+
 exports.default = _default;
 
 /***/ }),
@@ -273,8 +429,6 @@ var _index = __webpack_require__(/*! ./index */ "./CalendarFrontEnd/client/compo
 
 var _redux_store = __webpack_require__(/*! ../redux_store */ "./CalendarFrontEnd/client/redux_store/index.js");
 
-var _semanticUiReact = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
-
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -303,10 +457,10 @@ var Calendar =
 function (_Component) {
   _inherits(Calendar, _Component);
 
-  function Calendar(props) {
+  function Calendar() {
     _classCallCheck(this, Calendar);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(Calendar).call(this, props));
+    return _possibleConstructorReturn(this, _getPrototypeOf(Calendar).apply(this, arguments));
   }
 
   _createClass(Calendar, [{
@@ -357,7 +511,7 @@ function (_Component) {
   return Calendar;
 }(_react.Component);
 /**
- * CONTAINER
+ * Map state and dispatch to props
  */
 
 
@@ -422,7 +576,9 @@ function CalendarDay(props) {
       event: event
     });
   }) : null), // only display the Add Event button in boxes that have numbers in them.
-  day <= 31 ? _react.default.createElement(_index.AddEvent, null) : null);
+  day <= 31 ? _react.default.createElement(_index.AddEvent, {
+    day: day
+  }) : null);
 }
 
 /***/ }),
@@ -603,15 +759,24 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = _default;
-exports.fetchEvents = exports.getEvents = void 0;
+exports.createEvent = exports.fetchEvents = exports.addEvent = exports.getEvents = void 0;
 
 var _axios = _interopRequireDefault(__webpack_require__(/*! axios */ "./node_modules/axios/index.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
 /**
  * ACTION TYPES
  */
+var ADD_EVENT = 'ADD_EVENT';
 var GET_EVENTS = 'GET_EVENTS';
 /**
  * INITIAL STATE
@@ -628,12 +793,21 @@ var getEvents = function getEvents(events) {
     events: events
   };
 };
+
+exports.getEvents = getEvents;
+
+var addEvent = function addEvent(event) {
+  return {
+    type: ADD_EVENT,
+    event: event
+  };
+};
 /**
  * THUNK CREATORS
  */
 
 
-exports.getEvents = getEvents;
+exports.addEvent = addEvent;
 
 var fetchEvents = function fetchEvents() {
   return function (dispatch) {
@@ -646,12 +820,26 @@ var fetchEvents = function fetchEvents() {
     });
   };
 };
+
+exports.fetchEvents = fetchEvents;
+
+var createEvent = function createEvent(event) {
+  return function (dispatch) {
+    return _axios.default.post('/api/events', event).then(function (res) {
+      return res.data;
+    }).then(function (event) {
+      dispatch(addEvent(event));
+    }).catch(function (err) {
+      return console.log(err);
+    });
+  };
+};
 /**
  * REDUCER
  */
 
 
-exports.fetchEvents = fetchEvents;
+exports.createEvent = createEvent;
 
 function _default() {
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : defaultEvents;
@@ -660,6 +848,9 @@ function _default() {
   switch (action.type) {
     case GET_EVENTS:
       return action.events;
+
+    case ADD_EVENT:
+      return _toConsumableArray(state).concat([action.event]);
 
     default:
       return state;
