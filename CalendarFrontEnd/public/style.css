@@ -36,6 +36,11 @@
   margin: 5px;
 }
 
+#singleDayButtons {
+  display: flex;
+  justify-content: space-between;
+}
+
 #addEventButton {
   margin: 5px;
   width: 20%;
@@ -50,7 +55,50 @@
   border-radius: 25px;
 }
 
+/* Events on single day view*/
+
 .eventText {
   margin: 0;
   padding-left: 10px;
+}
+
+#singleDayView {
+  margin: 5px;
+  width: 20%;
+  align-self: flex-end;
+}
+
+#singleDayModal {
+  width: 60vw;
+}
+
+#singleEventHeader {
+  width: 50vw;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#singEventDesc {
+  padding-left: 4vw;
+}
+
+/* Days of week */
+
+#daysOfWeekContainer {
+  width: calc(84vw + 3px);
+  display: flex;
+  border-left: 1.5px solid black;
+  border-right: 1.5px solid black;
+}
+
+#daysOfWeek {
+  border: px solid black;
+  width: calc(12vw);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-left: 1.5px solid black;
+  border-right: 1.5px solid black;
+  border-top: 3px solid black;
 }

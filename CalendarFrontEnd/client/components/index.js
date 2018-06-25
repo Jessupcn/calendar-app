@@ -5,4 +5,7 @@
 export { default as Calendar } from './Calendar';
 export { default as CalendarDay } from './CalendarDay';
 export { default as CalendarEvent } from './CalendarEvent';
-export { default as AddEvent } from './AddEvent';
+export { default as AddUpdateEvent } from './AddUpdateEvent';
+export { default as SingleDay } from './SingleDay';
+export { default as SingleDaysEvent } from './SingleDaysEvent';
+export { default as DaysOfWeek } from './DaysOfWeek';

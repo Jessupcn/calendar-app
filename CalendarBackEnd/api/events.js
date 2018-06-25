@@ -8,8 +8,15 @@ router.get('/', (req, res, next) => {
     .catch(next);
 });
 
-router.get('/:id', (req, res, next) => {
+router.put('/:id', (req, res, next) => {
   Event.findById(req.params.id)
+    .then(event => {
+      if (!event) {
+        res.sendStatus(500);
+      } else {
+        return event.update(req.body);
+      }
+    })
     .then(event => res.status(200).json(event))
     .catch(next);
 });
@@ -21,7 +28,7 @@ router.post('/', (req, res, next) => {
 });
 
 router.delete('/:id', (req, res, next) => {
-  const id = req.params.channelId;
+  const id = req.params.id;
   Event.destroy({ where: { id } })
     .then(() => res.status(204).end())
     .catch(next);

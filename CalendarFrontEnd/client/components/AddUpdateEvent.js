@@ -10,7 +10,7 @@ import {
   TextArea,
   Select
 } from 'semantic-ui-react';
-import { createEvent } from '../redux_store';
+import { eventUpdate, createEvent } from '../redux_store';
 
 // Options for time dropdown
 const options = [
@@ -46,11 +46,21 @@ class AddEvent extends Component {
 
     this.state = {
       modalOpen: false,
-      eventName: this.props.passedInEvent.name || '',
-      eventDescription: this.props.passedInEvent.description || '',
+      eventName: '',
+      eventDescription: '',
       startTime: '',
       endTime: ''
     };
+
+    if (props.passedInEvent) {
+      this.state = {
+        modalOpen: false,
+        eventName: this.props.passedInEvent.name,
+        eventDescription: this.props.passedInEvent.description,
+        startTime: '',
+        endTime: ''
+      };
+    }
 
     //Bind functions
     this.handleChange = this.handleChange.bind(this);
@@ -65,28 +75,25 @@ class AddEvent extends Component {
 
   handleSubmit() {
     const { eventName, eventDescription, startTime, endTime } = this.state;
+    const { passedInEvent, day, sendUpdate, addEvent } = this.props;
     const objToSend = {
       name: eventName,
       description: eventDescription,
-      startTime: `2018-07-${this.props.day} ${startTime}:00:00`,
-      endTime: `2018-07-${this.props.day} ${endTime}:00:00`
+      startTime: `2018-07-${day} ${startTime}:00:00`,
+      endTime: `2018-07-${day} ${endTime}:00:00`
     };
-    this.props.addEvent(objToSend);
+    if (passedInEvent) objToSend.id = passedInEvent.id;
+    passedInEvent ? sendUpdate(objToSend) : addEvent(objToSend);
     this.setState({ modalOpen: false });
   }
 
   render() {
     return (
       <Modal
-        trigger={
-          <Icon
-            onClick={() => this.setState({ modalOpen: true })}
-            name="add"
-            id="addEventButton"
-          />
-        }
+        trigger={this.props.trigger}
         basic
         size="small"
+        onOpen={() => this.setState({ modalOpen: true })}
         open={this.state.modalOpen}
         onClose={() => this.setState({ modalOpen: false })}
       >
@@ -147,6 +154,9 @@ const mapDispatch = dispatch => {
   return {
     addEvent(event) {
       dispatch(createEvent(event));
+    },
+    sendUpdate(event) {
+      dispatch(eventUpdate(event));
     }
   };
 };

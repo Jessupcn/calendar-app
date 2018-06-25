@@ -118,10 +118,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ "./CalendarFrontEnd/client/components/AddEvent.js":
-/*!********************************************************!*\
-  !*** ./CalendarFrontEnd/client/components/AddEvent.js ***!
-  \********************************************************/
+/***/ "./CalendarFrontEnd/client/components/AddUpdateEvent.js":
+/*!**************************************************************!*\
+  !*** ./CalendarFrontEnd/client/components/AddUpdateEvent.js ***!
+  \**************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -275,11 +275,22 @@ function (_Component) {
     _this = _possibleConstructorReturn(this, _getPrototypeOf(AddEvent).call(this, props));
     _this.state = {
       modalOpen: false,
-      eventName: _this.props.passedInEvent.name || '',
-      eventDescription: _this.props.passedInEvent.description || '',
+      eventName: '',
+      eventDescription: '',
       startTime: '',
       endTime: ''
-    }; //Bind functions
+    };
+
+    if (props.passedInEvent) {
+      _this.state = {
+        modalOpen: false,
+        eventName: _this.props.passedInEvent.name,
+        eventDescription: _this.props.passedInEvent.description,
+        startTime: '',
+        endTime: ''
+      };
+    } //Bind functions
+
 
     _this.handleChange = _this.handleChange.bind(_assertThisInitialized(_assertThisInitialized(_this)));
     _this.handleSubmit = _this.handleSubmit.bind(_assertThisInitialized(_assertThisInitialized(_this)));
@@ -303,13 +314,19 @@ function (_Component) {
           eventDescription = _this$state.eventDescription,
           startTime = _this$state.startTime,
           endTime = _this$state.endTime;
+      var _this$props = this.props,
+          passedInEvent = _this$props.passedInEvent,
+          day = _this$props.day,
+          sendUpdate = _this$props.sendUpdate,
+          addEvent = _this$props.addEvent;
       var objToSend = {
         name: eventName,
         description: eventDescription,
-        startTime: "2018-07-".concat(this.props.day, " ").concat(startTime, ":00:00"),
-        endTime: "2018-07-".concat(this.props.day, " ").concat(endTime, ":00:00")
+        startTime: "2018-07-".concat(day, " ").concat(startTime, ":00:00"),
+        endTime: "2018-07-".concat(day, " ").concat(endTime, ":00:00")
       };
-      this.props.addEvent(objToSend);
+      if (passedInEvent) objToSend.id = passedInEvent.id;
+      passedInEvent ? sendUpdate(objToSend) : addEvent(objToSend);
       this.setState({
         modalOpen: false
       });
@@ -320,17 +337,14 @@ function (_Component) {
       var _this2 = this;
 
       return _react.default.createElement(_semanticUiReact.Modal, {
-        trigger: _react.default.createElement(_semanticUiReact.Icon, {
-          onClick: function onClick() {
-            return _this2.setState({
-              modalOpen: true
-            });
-          },
-          name: "add",
-          id: "addEventButton"
-        }),
+        trigger: this.props.trigger,
         basic: true,
         size: "small",
+        onOpen: function onOpen() {
+          return _this2.setState({
+            modalOpen: true
+          });
+        },
         open: this.state.modalOpen,
         onClose: function onClose() {
           return _this2.setState({
@@ -394,6 +408,9 @@ var mapDispatch = function mapDispatch(dispatch) {
   return {
     addEvent: function addEvent(event) {
       dispatch((0, _redux_store.createEvent)(event));
+    },
+    sendUpdate: function sendUpdate(event) {
+      dispatch((0, _redux_store.eventUpdate)(event));
     }
   };
 }; // The `withRouter` wrapper makes sure that updates are not blocked
@@ -499,12 +516,11 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      console.log(this.props);
       return _react.default.createElement("div", {
         id: "calendarContainer"
       }, _react.default.createElement("div", {
         id: "titleContainer"
-      }, _react.default.createElement("h1", null, "July")), _react.default.createElement("div", {
+      }, _react.default.createElement("h1", null, "July")), _react.default.createElement(_index.DaysOfWeek, null), _react.default.createElement("div", {
         id: "dayContainer"
       }, this.buildCalendar()));
     }
@@ -558,15 +574,15 @@ var _react = _interopRequireDefault(__webpack_require__(/*! react */ "./node_mod
 
 var _index = __webpack_require__(/*! ./index */ "./CalendarFrontEnd/client/components/index.js");
 
+var _semanticUiReact = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function CalendarDay(props) {
-  // Pull the current date and events array off the passed
-  // through event object.
+  // Pull the current date and events array off the passed through event object.
   var _props$eventObj = props.eventObj,
       day = _props$eventObj.day,
       events = _props$eventObj.events;
-  console.log(events);
   return _react.default.createElement("div", {
     id: "calendarDay"
   }, _react.default.createElement("div", null, _react.default.createElement("h3", {
@@ -577,9 +593,18 @@ function CalendarDay(props) {
       event: event
     });
   }) : null), // only display the Add Event button in boxes that have numbers in them.
-  day <= 31 ? _react.default.createElement(_index.AddEvent, {
-    day: day
-  }) : null);
+  day <= 31 ? _react.default.createElement("div", {
+    id: "singleDayButtons"
+  }, _react.default.createElement(_index.SingleDay, {
+    day: day,
+    events: events
+  }), _react.default.createElement(_index.AddUpdateEvent, {
+    day: day,
+    trigger: _react.default.createElement(_semanticUiReact.Icon, {
+      name: "add",
+      id: "addEventButton"
+    })
+  })) : null);
 }
 
 /***/ }),
@@ -603,7 +628,6 @@ var _react = _interopRequireDefault(__webpack_require__(/*! react */ "./node_mod
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// import { CalendarEvent } from './index';
 function CalendarDay(props) {
   var event = props.event;
   return _react.default.createElement("div", {
@@ -612,6 +636,211 @@ function CalendarDay(props) {
     className: "eventText"
   }, event.name));
 }
+
+/***/ }),
+
+/***/ "./CalendarFrontEnd/client/components/DaysOfWeek.js":
+/*!**********************************************************!*\
+  !*** ./CalendarFrontEnd/client/components/DaysOfWeek.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = DaysOfWeek;
+
+var _react = _interopRequireDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function DaysOfWeek() {
+  var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  return _react.default.createElement("div", {
+    id: "daysOfWeekContainer"
+  }, days.map(function (day) {
+    return _react.default.createElement("div", {
+      key: day,
+      id: "daysOfWeek"
+    }, _react.default.createElement("h5", null, day));
+  }));
+}
+
+/***/ }),
+
+/***/ "./CalendarFrontEnd/client/components/SingleDay.js":
+/*!*********************************************************!*\
+  !*** ./CalendarFrontEnd/client/components/SingleDay.js ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var _semanticUiReact = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
+
+var _index = __webpack_require__(/*! ./index */ "./CalendarFrontEnd/client/components/index.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function SingleDay(props) {
+  var day = props.day;
+  var events = props.events;
+  return _react.default.createElement(_semanticUiReact.Modal, {
+    id: "singleDayModal",
+    trigger: _react.default.createElement(_semanticUiReact.Icon, {
+      name: "clipboard outline",
+      id: "singleDayView"
+    })
+  }, _react.default.createElement(_semanticUiReact.Header, {
+    icon: "clipboard outline",
+    content: "Events for July ".concat(day)
+  }), _react.default.createElement(_semanticUiReact.Modal.Content, null, events.length ? events.map(function (event) {
+    return _react.default.createElement(_index.SingleDaysEvent, {
+      key: event.id,
+      event: event,
+      day: day
+    });
+  }) : "There are no events on July ".concat(day)));
+}
+
+var _default = SingleDay;
+exports.default = _default;
+
+/***/ }),
+
+/***/ "./CalendarFrontEnd/client/components/SingleDaysEvent.js":
+/*!***************************************************************!*\
+  !*** ./CalendarFrontEnd/client/components/SingleDaysEvent.js ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var _reactRedux = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+
+var _reactRouterDom = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/es/index.js");
+
+var _semanticUiReact = __webpack_require__(/*! semantic-ui-react */ "./node_modules/semantic-ui-react/dist/es/index.js");
+
+var _redux_store = __webpack_require__(/*! ../redux_store */ "./CalendarFrontEnd/client/redux_store/index.js");
+
+var _AddUpdateEvent = _interopRequireDefault(__webpack_require__(/*! ./AddUpdateEvent */ "./CalendarFrontEnd/client/components/AddUpdateEvent.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+var SingleDaysEvent =
+/*#__PURE__*/
+function (_Component) {
+  _inherits(SingleDaysEvent, _Component);
+
+  function SingleDaysEvent(props) {
+    var _this;
+
+    _classCallCheck(this, SingleDaysEvent);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(SingleDaysEvent).call(this, props));
+    _this.state = {}; // bind functions
+
+    _this.handleDelete = _this.handleDelete.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    return _this;
+  }
+
+  _createClass(SingleDaysEvent, [{
+    key: "handleDelete",
+    value: function handleDelete() {
+      var event = this.props.event;
+      this.props.deleteEvent(event);
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this$props = this.props,
+          day = _this$props.day,
+          event = _this$props.event;
+      return _react.default.createElement("div", {
+        id: "singleEvent"
+      }, _react.default.createElement("div", {
+        id: "singleEventHeader"
+      }, _react.default.createElement("h4", {
+        className: "eventText"
+      }, event.name), _react.default.createElement("div", null, _react.default.createElement(_AddUpdateEvent.default, {
+        passedInEvent: event,
+        day: day,
+        trigger: _react.default.createElement(_semanticUiReact.Icon, {
+          name: "edit"
+        })
+      }), _react.default.createElement(_semanticUiReact.Icon, {
+        name: "delete",
+        color: "red",
+        onClick: this.handleDelete
+      }))), _react.default.createElement("p", {
+        id: "singEventDesc"
+      }, event.description));
+    }
+  }]);
+
+  return SingleDaysEvent;
+}(_react.Component);
+/**
+ * Map dispatch to props
+ */
+
+
+var mapDispatch = function mapDispatch(dispatch) {
+  return {
+    deleteEvent: function deleteEvent(event) {
+      dispatch((0, _redux_store.deleteEvent)(event.id));
+    }
+  };
+}; // The `withRouter` wrapper makes sure that updates are not blocked
+// when the url changes
+
+
+var _default = (0, _reactRouterDom.withRouter)((0, _reactRedux.connect)(null, mapDispatch)(SingleDaysEvent));
+
+exports.default = _default;
 
 /***/ }),
 
@@ -646,10 +875,28 @@ Object.defineProperty(exports, "CalendarEvent", {
     return _CalendarEvent.default;
   }
 });
-Object.defineProperty(exports, "AddEvent", {
+Object.defineProperty(exports, "AddUpdateEvent", {
   enumerable: true,
   get: function get() {
-    return _AddEvent.default;
+    return _AddUpdateEvent.default;
+  }
+});
+Object.defineProperty(exports, "SingleDay", {
+  enumerable: true,
+  get: function get() {
+    return _SingleDay.default;
+  }
+});
+Object.defineProperty(exports, "SingleDaysEvent", {
+  enumerable: true,
+  get: function get() {
+    return _SingleDaysEvent.default;
+  }
+});
+Object.defineProperty(exports, "DaysOfWeek", {
+  enumerable: true,
+  get: function get() {
+    return _DaysOfWeek.default;
   }
 });
 
@@ -659,7 +906,13 @@ var _CalendarDay = _interopRequireDefault(__webpack_require__(/*! ./CalendarDay 
 
 var _CalendarEvent = _interopRequireDefault(__webpack_require__(/*! ./CalendarEvent */ "./CalendarFrontEnd/client/components/CalendarEvent.js"));
 
-var _AddEvent = _interopRequireDefault(__webpack_require__(/*! ./AddEvent */ "./CalendarFrontEnd/client/components/AddEvent.js"));
+var _AddUpdateEvent = _interopRequireDefault(__webpack_require__(/*! ./AddUpdateEvent */ "./CalendarFrontEnd/client/components/AddUpdateEvent.js"));
+
+var _SingleDay = _interopRequireDefault(__webpack_require__(/*! ./SingleDay */ "./CalendarFrontEnd/client/components/SingleDay.js"));
+
+var _SingleDaysEvent = _interopRequireDefault(__webpack_require__(/*! ./SingleDaysEvent */ "./CalendarFrontEnd/client/components/SingleDaysEvent.js"));
+
+var _DaysOfWeek = _interopRequireDefault(__webpack_require__(/*! ./DaysOfWeek */ "./CalendarFrontEnd/client/components/DaysOfWeek.js"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -740,7 +993,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = _default;
-exports.createEvent = exports.fetchEvents = exports.addEvent = exports.getEvents = void 0;
+exports.eventUpdate = exports.deleteEvent = exports.createEvent = exports.fetchEvents = exports.updateEvent = exports.removeEvent = exports.addEvent = exports.getEvents = void 0;
 
 var _axios = _interopRequireDefault(__webpack_require__(/*! axios */ "./node_modules/axios/index.js"));
 
@@ -758,7 +1011,9 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
  * ACTION TYPES
  */
 var ADD_EVENT = 'ADD_EVENT';
+var REMOVE_EVENT = 'REMOVE_EVENT';
 var GET_EVENTS = 'GET_EVENTS';
+var UPDATE_EVENT = 'UPDATE_EVENTS';
 /**
  * INITIAL STATE
  */
@@ -783,12 +1038,30 @@ var addEvent = function addEvent(event) {
     event: event
   };
 };
+
+exports.addEvent = addEvent;
+
+var removeEvent = function removeEvent(id) {
+  return {
+    type: REMOVE_EVENT,
+    id: id
+  };
+};
+
+exports.removeEvent = removeEvent;
+
+var updateEvent = function updateEvent(event) {
+  return {
+    type: UPDATE_EVENT,
+    event: event
+  };
+};
 /**
  * THUNK CREATORS
  */
 
 
-exports.addEvent = addEvent;
+exports.updateEvent = updateEvent;
 
 var fetchEvents = function fetchEvents() {
   return function (dispatch) {
@@ -808,8 +1081,36 @@ var createEvent = function createEvent(event) {
   return function (dispatch) {
     return _axios.default.post('/api/events', event).then(function (res) {
       return res.data;
-    }).then(function (event) {
-      dispatch(addEvent(event));
+    }).then(function (addedEvent) {
+      dispatch(addEvent(addedEvent));
+    }).catch(function (err) {
+      return console.log(err);
+    });
+  };
+};
+
+exports.createEvent = createEvent;
+
+var deleteEvent = function deleteEvent(id) {
+  return function (dispatch) {
+    return _axios.default.delete("/api/events/".concat(id)).then(function (res) {
+      return res.data;
+    }).then(function () {
+      dispatch(removeEvent(id));
+    }).catch(function (err) {
+      return console.log(err);
+    });
+  };
+};
+
+exports.deleteEvent = deleteEvent;
+
+var eventUpdate = function eventUpdate(event) {
+  return function (dispatch) {
+    return _axios.default.put("/api/events/".concat(event.id), event).then(function (res) {
+      return res.data;
+    }).then(function (updatedEvent) {
+      return dispatch(updateEvent(updatedEvent));
     }).catch(function (err) {
       return console.log(err);
     });
@@ -820,7 +1121,7 @@ var createEvent = function createEvent(event) {
  */
 
 
-exports.createEvent = createEvent;
+exports.eventUpdate = eventUpdate;
 
 function _default() {
   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : defaultEvents;
@@ -832,6 +1133,16 @@ function _default() {
 
     case ADD_EVENT:
       return _toConsumableArray(state).concat([action.event]);
+
+    case REMOVE_EVENT:
+      return state.filter(function (event) {
+        return event.id !== action.id;
+      });
+
+    case UPDATE_EVENT:
+      return state.filter(function (event) {
+        return event.id !== action.event.id;
+      }).concat(action.event);
 
     default:
       return state;

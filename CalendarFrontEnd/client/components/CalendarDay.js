@@ -1,11 +1,10 @@
 import React from 'react';
-import { CalendarEvent, AddEvent } from './index';
+import { CalendarEvent, AddUpdateEvent, SingleDay } from './index';
+import { Icon } from 'semantic-ui-react';
 
 export default function CalendarDay(props) {
-  // Pull the current date and events array off the passed
-  // through event object.
+  // Pull the current date and events array off the passed through event object.
   const { day, events } = props.eventObj;
-  console.log(events);
   return (
     <div id="calendarDay">
       <div>
@@ -17,7 +16,15 @@ export default function CalendarDay(props) {
           : null}
       </div>
       {// only display the Add Event button in boxes that have numbers in them.
-      day <= 31 ? <AddEvent day={day} /> : null}
+      day <= 31 ? (
+        <div id="singleDayButtons">
+          <SingleDay day={day} events={events} />
+          <AddUpdateEvent
+            day={day}
+            trigger={<Icon name="add" id="addEventButton" />}
+          />
+        </div>
+      ) : null}
     </div>
   );
 }

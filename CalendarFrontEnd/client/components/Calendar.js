@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
-import { CalendarDay } from './index';
+import { CalendarDay, DaysOfWeek } from './index';
 import { fetchEvents } from '../redux_store';
 
 /**
@@ -34,12 +34,12 @@ class Calendar extends Component {
   }
 
   render() {
-    console.log(this.props);
     return (
       <div id="calendarContainer">
         <div id="titleContainer">
           <h1>July</h1>
         </div>
+        <DaysOfWeek />
         <div id="dayContainer">{this.buildCalendar()}</div>
       </div>
     );
