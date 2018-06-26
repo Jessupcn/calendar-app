@@ -794,11 +794,25 @@ function (_Component) {
       this.props.deleteEvent(event);
     }
   }, {
+    key: "extractHours",
+    value: function extractHours(timeString) {
+      var time = new Date(timeString);
+      var hours = time.getHours();
+      var updatedTime = hours >= 12 ? "".concat(hours % 12, " pm") : "".concat(hours, " am");
+
+      if (updatedTime[0] === '0') {
+        updatedTime = "12 ".concat(updatedTime.slice(1));
+      }
+
+      return updatedTime;
+    }
+  }, {
     key: "render",
     value: function render() {
       var _this$props = this.props,
           day = _this$props.day,
           event = _this$props.event;
+      console.log('HOURS: ', this.extractHours(event.endTime));
       return _react.default.createElement("div", {
         id: "singleEvent"
       }, _react.default.createElement("div", {
@@ -816,6 +830,8 @@ function (_Component) {
         color: "red",
         onClick: this.handleDelete
       }))), _react.default.createElement("p", {
+        id: "timeContainer"
+      }, this.extractHours(event.startTime), " -", ' ', this.extractHours(event.endTime)), _react.default.createElement("p", {
         id: "singEventDesc"
       }, event.description));
     }

@@ -8,7 +8,7 @@
 
 ## About
 
-SpotiCalendar was built using an express server and Postgres database backend, and the front end was built out using React.js and Redux, using Semantic-UI to style.
+SpotiCalendar is a calendar web application which allows a user to add events to a calendar and edit them once they are added. Users can also delete events off the calendar. SpotiCalendar was built using an express server and Postgres database backend, and the front end was built out using React.js and Redux, using Semantic-UI to style.
 
 ## Setup
 

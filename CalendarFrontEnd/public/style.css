@@ -73,10 +73,16 @@
 }
 
 #singleEventHeader {
+  padding-top: 10px;
   width: 50vw;
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+#timeContainer {
+  margin-bottom: 0px;
+  padding-left: 10px;
 }
 
 #singEventDesc {

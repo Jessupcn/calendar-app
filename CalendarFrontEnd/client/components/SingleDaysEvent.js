@@ -20,8 +20,19 @@ class SingleDaysEvent extends Component {
     this.props.deleteEvent(event);
   }
 
+  extractHours(timeString) {
+    const time = new Date(timeString);
+    const hours = time.getHours();
+    let updatedTime = hours >= 12 ? `${hours % 12} pm` : `${hours} am`;
+    if (updatedTime[0] === '0') {
+      updatedTime = `12 ${updatedTime.slice(1)}`;
+    }
+    return updatedTime;
+  }
+
   render() {
     const { day, event } = this.props;
+    console.log('HOURS: ', this.extractHours(event.endTime));
     return (
       <div id="singleEvent">
         <div id="singleEventHeader">
@@ -35,6 +46,10 @@ class SingleDaysEvent extends Component {
             <Icon name="delete" color="red" onClick={this.handleDelete} />
           </div>
         </div>
+        <p id="timeContainer">
+          {this.extractHours(event.startTime)} -{' '}
+          {this.extractHours(event.endTime)}
+        </p>
         <p id="singEventDesc">{event.description}</p>
       </div>
     );
