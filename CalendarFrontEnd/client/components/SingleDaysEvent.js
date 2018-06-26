@@ -31,8 +31,7 @@ class SingleDaysEvent extends Component {
   }
 
   render() {
-    const { day, event } = this.props;
-    console.log('HOURS: ', this.extractHours(event.endTime));
+    const { day, event } = this.props;(event.endTime));
     return (
       <div id="singleEvent">
         <div id="singleEventHeader">
