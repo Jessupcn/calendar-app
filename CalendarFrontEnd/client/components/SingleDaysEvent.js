@@ -31,7 +31,7 @@ class SingleDaysEvent extends Component {
   }
 
   render() {
-    const { day, event } = this.props;(event.endTime));
+    const { day, event } = this.props;
     return (
       <div id="singleEvent">
         <div id="singleEventHeader">

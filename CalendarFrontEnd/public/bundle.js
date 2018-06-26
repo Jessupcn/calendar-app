@@ -812,7 +812,6 @@ function (_Component) {
       var _this$props = this.props,
           day = _this$props.day,
           event = _this$props.event;
-      console.log('HOURS: ', this.extractHours(event.endTime));
       return _react.default.createElement("div", {
         id: "singleEvent"
       }, _react.default.createElement("div", {
