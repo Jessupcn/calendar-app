@@ -22,7 +22,7 @@ class SingleDaysEvent extends Component {
 
   extractHours(timeString) {
     const time = new Date(timeString);
-    const hours = time.getHours();
+    const hours = time.getHours() + 4;
     let updatedTime = hours >= 12 ? `${hours % 12} pm` : `${hours} am`;
     if (updatedTime[0] === '0') {
       updatedTime = `12 ${updatedTime.slice(1)}`;
