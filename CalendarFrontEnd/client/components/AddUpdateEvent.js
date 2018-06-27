@@ -12,7 +12,7 @@ import {
 } from 'semantic-ui-react';
 import { eventUpdate, createEvent } from '../redux_store';
 
-// Options for time dropdown
+// Options for start and end time dropdowns
 const options = [
   { key: '0', value: '0', text: '12 am' },
   { key: '1', value: '1', text: '1 am' },
@@ -161,8 +161,6 @@ const mapDispatch = dispatch => {
   };
 };
 
-// The `withRouter` wrapper makes sure that updates are not blocked
-// when the url changes
 export default withRouter(
   connect(
     null,
